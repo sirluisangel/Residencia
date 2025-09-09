@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ingreso | Desarrollo Urbano</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="auth-layout">
+  <div class="auth-card">
+    <div class="auth-header">
+      <i class="fa-solid fa-shield-halved"></i>
+      <h1>Desarrollo Urbano</h1>
+      <p class="muted">Accede o crea tu cuenta</p>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="login">Iniciar sesión</button>
+      <button class="tab" data-tab="register">Registrarse</button>
+    </div>
+
+    <!-- Login -->
+    <form id="loginForm" class="auth-form tab-pane active" autocomplete="off">
+      <div class="field">
+        <label for="loginUser"><i class="fa-solid fa-user"></i> Usuario</label>
+        <input id="loginUser" type="text" required/>
+      </div>
+      <div class="field">
+        <label for="loginPass"><i class="fa-solid fa-key"></i> Contraseña</label>
+        <input id="loginPass" type="password" required/>
+      </div>
+      <button class="btn primary w-full" type="submit">
+        <i class="fa-solid fa-right-to-bracket"></i> Entrar
+      </button>
+    </form>
+
+    <!-- Registro -->
+    <form id="registerForm" class="auth-form tab-pane" autocomplete="off">
+      <div class="field">
+        <label for="regUser"><i class="fa-solid fa-user-plus"></i> Usuario</label>
+        <input id="regUser" type="text" required/>
+      </div>
+      <div class="field">
+        <label for="regPass"><i class="fa-solid fa-lock"></i> Contraseña</label>
+        <input id="regPass" type="password" required/>
+      </div>
+      <button class="btn success w-full" type="submit">
+        <i class="fa-solid fa-user-check"></i> Crear cuenta
+      </button>
+    </form>
+
+    <footer class="auth-footer">
+      <small>© 2025 Agenda de Pagos — </small>
+    </footer>
+  </div>
+
+  <script src="login.js"></script>
+</body>
+</html>

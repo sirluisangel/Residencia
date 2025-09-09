@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agenda Control de Pagos</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="brand">
+      <i class="fa-solid fa-book"></i>
+      <span>Menú</span>
+    </div>
+    <nav>
+      <a class="navitem active" data-section="pagos"><i class="fa-solid fa-list-check"></i> Control de pagos</a>
+      <a class="navitem" data-section="buscar"><i class="fa-solid fa-magnifying-glass"></i> Buscar expediente</a>
+      <a class="navitem" data-section="reportes"><i class="fa-solid fa-chart-line"></i> Reportes</a>
+      <a class="navitem" data-section="config"><i class="fa-solid fa-gear"></i> Configuración</a>
+      <a class="navitem" href="login.html"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</a>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <main class="content">
+    <header class="topbar">
+      <h1><i class="fa-solid fa-calendar-check"></i> Agenda Control de Pagos</h1>
+      <div class="topbar-actions">
+        <span id="userBadge" class="badge"></span>
+        <button id="toggleTheme" class="icon-btn" title="Tema oscuro/claro"><i class="fa-solid fa-moon"></i></button>
+      </div>
+    </header>
+
+    <!-- SECTION: Control de Pagos -->
+    <section id="section-pagos" class="card section visible">
+      <form id="formPagos">
+        <h2>Datos Generales</h2>
+        <div class="grid-2 gap">
+          <div class="field">
+            <label for="folioExp">Folio de Expediente</label>
+            <input id="folioExp" type="text" required/>
+          </div>
+          <div class="field">
+            <label for="fechaIng">Fecha de Ingreso</label>
+            <input id="fechaIng" type="date" required/>
+          </div>
+          <div class="field">
+            <label for="folio">Folio</label>
+            <input id="folio" type="text" required/>
+          </div>
+          <div class="field">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text" required/>
+          </div>
+        </div>
+
+        <h2>Trámites Solicitados</h2>
+        <div class="tramites">
+          <label class="tramite">
+            <input type="checkbox" class="chk" data-code="LUS"/>
+            <span>1. L.U.S</span>
+            <input type="number" step="0.01" min="0" class="importe" data-for="LUS" placeholder="Importe" disabled/>
+          </label>
+          <label class="tramite">
+            <input type="checkbox" class="chk" data-code="CIZ"/>
+            <span>2. C.I.Z</span>
+            <input type="number" step="0.01" min="0" class="importe" data-for="CIZ" placeholder="Importe" disabled/>
+          </label>
+          <label class="tramite">
+            <input type="checkbox" class="chk" data-code="CANO"/>
+            <span>3. C.A.N.O</span>
+            <input type="number" step="0.01" min="0" class="importe" data-for="CANO" placeholder="Importe" disabled/>
+          </label>
+          <label class="tramite">
+            <input type="checkbox" class="chk" data-code="CUS"/>
+            <span>4. C.U.S</span>
+            <input type="number" step="0.01" min="0" class="importe" data-for="CUS" placeholder="Importe" disabled/>
+          </label>
+          <label class="tramite">
+            <input type="checkbox" class="chk" data-code="VBCUS"/>
+            <span>5. V.B.C.U.S</span>
+            <input type="number" step="0.01" min="0" class="importe" data-for="VBCUS" placeholder="Importe" disabled/>
+          </label>
+        </div>
+
+        <div class="grid-2 gap">
+          <div class="field">
+            <label for="importeTotal">Importe Total</label>
+            <input id="importeTotal" type="text" readonly class="readonly"/>
+          </div>
+          <div class="field">
+            <label for="noRecibo">No. Recibo</label>
+            <input id="noRecibo" type="text"/>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="obs">Observaciones</label>
+          <textarea id="obs" rows="3"></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="button" class="btn" id="btnBuscar"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+          <button type="button" class="btn success" id="btnGuardar"><i class="fa-solid fa-floppy-disk"></i> Guardar</button>
+          <button type="button" class="btn info" id="btnActualizar"><i class="fa-solid fa-rotate"></i> Actualizar</button>
+          <button type="button" class="btn danger" id="btnEliminar"><i class="fa-solid fa-trash"></i> Eliminar</button>
+          <button type="reset" class="btn ghost" id="btnLimpiar">Limpiar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Resumen -->
+    <section class="card section visible">
+      <h2>Resumen de Trámites</h2>
+      <div class="table-wrap">
+        <table class="table" id="tablaResumen">
+          <thead>
+          <tr><th>Trámite</th><th>Importe</th></tr>
+          </thead>
+          <tbody></tbody>
+          <tfoot>
+          <tr>
+            <td class="right bold">Total</td>
+            <td id="resTotal" class="bold">$0.00</td>
+          </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION: Buscar expediente (solo folio) -->
+    <section id="section-buscar" class="card section">
+      <h2>Buscar por Folio</h2>
+      <div class="grid-2 gap">
+        <div class="field">
+          <label for="buscarFolio">Folio</label>
+          <input id="buscarFolio" type="text" placeholder="Ingresa el folio exacto"/>
+        </div>
+        <div class="field">
+          <label>&nbsp;</label>
+          <button class="btn" id="btnBuscarFolio"><i class="fa-solid fa-search"></i> Buscar</button>
+        </div>
+      </div>
+
+      <div id="resultadoBusqueda" class="desglose"></div>
+    </section>
+
+    <!-- SECTION: Reportes (tabla general simple para esta versión) -->
+    <section id="section-reportes" class="card section">
+      <h2>Registros guardados</h2>
+      <div class="filters">
+        <div class="field">
+          <label for="repDesde">Desde</label>
+          <input id="repDesde" type="date"/>
+        </div>
+        <div class="field">
+          <label for="repHasta">Hasta</label>
+          <input id="repHasta" type="date"/>
+        </div>
+        <button class="btn" id="btnFiltrarRep"><i class="fa-solid fa-filter"></i> Filtrar</button>
+      </div>
+      <div class="table-wrap">
+        <table class="table" id="tablaReportes">
+          <thead>
+            <tr>
+              <th>Folio</th>
+              <th>Nombre</th>
+              <th>Fecha</th>
+              <th>Hora</th>
+              <th>Total</th>
+              <th>Usuario</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- SECTION: Configuración -->
+    <section id="section-config" class="card section">
+      <h2>Configuración</h2>
+      <p class="muted">Aquí puedes ajustar el tema y ver información del sistema (IndexedDB).</p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
